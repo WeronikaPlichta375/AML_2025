@@ -148,27 +148,66 @@ class LogRegCCD:
 
         return best_lambda, best_score
 
-    def plot_weights(self):
+    def plot(self, X_val, y_val, metric='roc_auc'):
         """
-        Plots how each weight changes across different lambda values.
+        Plots how the evaluation metric changes with lambda.
 
-        Labels: Bias, Feature 1, Feature 2, ..., Feature n
+        Parameters:
+        - X_val: validation data
+        - y_val: validation labels
+        - metric: metric to evaluate (same options as in validate)
+        """
+        scores = []
+
+        for lmbd in self.lambdas:
+            probs = self.predict_proba(X_val, lmbd=lmbd)
+
+            if metric == 'roc_auc':
+                score = roc_auc_score(y_val, probs)
+            elif metric == 'pr_auc':
+                score = average_precision_score(y_val, probs)
+            else:
+                preds = (probs >= 0.5).astype(int)
+                if metric == 'f1':
+                    score = f1_score(y_val, preds)
+                elif metric == 'recall':
+                    score = recall_score(y_val, preds)
+                elif metric == 'precision':
+                    score = precision_score(y_val, preds)
+                elif metric == 'balanced_accuracy':
+                    score = balanced_accuracy_score(y_val, preds)
+                else:
+                    raise ValueError(f"Unknown metric: {metric}")
+
+            scores.append(score)
+
+        plt.figure(figsize=(8, 5))
+        plt.plot(self.lambdas, scores, marker='o')
+        plt.xscale('log')
+        plt.xlabel("Lambda")
+        plt.ylabel(metric.replace("_", " ").title())
+        plt.title(f"{metric.replace('_', ' ').title()} vs Lambda")
+        plt.grid(True)
+        plt.show()
+
+    def plot_coefficients(self):
+        """
+        Plots how each weight (coefficient) changes across lambda values.
+
+        Bias is shown separately as 'Bias', others as 'Feature i'.
         """
         plt.figure(figsize=(8, 5))
         num_features = len(next(iter(self.coefs.values())))
 
         for i in range(num_features):
             path = [w[i] for w in self.coefs.values()]
-            if i == 0:
-                label = "Bias"
-            else:
-                label = f"Feature {i}"
+            label = "Bias" if i == 0 else f"Feature {i}"
             plt.plot(self.lambdas, path, label=label)
 
-        plt.xscale('log') # log scale for lambda
+        plt.xscale('log')
         plt.xlabel('Lambda')
-        plt.ylabel('Weight value')
-        plt.title('Lasso coefficient paths')
+        plt.ylabel('Coefficient Value')
+        plt.title('Coefficient Paths (Lasso)')
         plt.legend()
         plt.grid(True)
         plt.show()
