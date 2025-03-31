@@ -33,6 +33,8 @@
 
 2. The file `compare_real_datasets.py` contains methods to generate evaluation metrics and coefficients for comparison and save them as .txt files.
 
-3. The notebook `test_synthetic.ipynb` performs similar evaluation on synthetic data.
+3. The file `LogRegCCD_LogRegSklearn_Breast_Ionosphere.ipnyb` shows sample printing results in our notebook format for two datasets and shows the results (one of us was working in a notebook, but the script `compare_real_datasets.py` can be used to compare all sets).
 
-4. All model coefficients are saved in the `data/coefficients` folder.
+4. The notebook `test_synthetic.ipynb` performs similar evaluation on synthetic data.
+
+5. All model coefficients are saved in the `data/coefficients` folder.
