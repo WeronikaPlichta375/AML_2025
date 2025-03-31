@@ -16,6 +16,7 @@ class LogRegCCD:
         self.tol = tol # Stopping threshold
         self.max_iter = max_iter # Max number of iterations per lambda
         self.coefs = {} # Dictionary to store learned weights
+        self.training_history = {}  # for storing per-lambda training info
 
     def _sigmoid(self, z):
         """
@@ -57,6 +58,9 @@ class LogRegCCD:
             self.lambdas = np.logspace(-4, 1, 30)
 
         for lmbd in self.lambdas:
+            loss_per_iter = []
+            coef_per_iter = []
+
             w = np.zeros(d) # Start with zero weights
             old_loss = self._loss(X, y, w, lmbd) # Initial cost
 
@@ -77,12 +81,20 @@ class LogRegCCD:
                     resid = y - self._sigmoid(X @ w)
 
                 new_loss = self._loss(X, y, w, lmbd) # Check new cost
+                
+                loss_per_iter.append(new_loss)
+                coef_per_iter.append(w.copy())
+
                 if abs(old_loss - new_loss) < self.tol:
                     # Stop if cost doesn't change much
                     break
                 old_loss = new_loss
 
             self.coefs[lmbd] = w.copy()  # Save weights for this lambda
+            self.training_history[lmbd] = {
+                "loss": loss_per_iter,
+                "coefs": coef_per_iter
+            }
 
     def predict_proba(self, X, lmbd=None):
         """
