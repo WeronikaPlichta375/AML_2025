@@ -31,10 +31,11 @@
 ## Data and Evaluation
 1. All benchmark datasets for comparison are available in the `data` folder, along with functions for model generation.
 
-2. The file `compare_real_datasets.py` contains methods to generate evaluation metrics and coefficients for comparison and save them as .txt files.
+2. The file `compare_real_datasets.py` contains methods to generate evaluation metrics and coefficients for comparison and save them as .txt files, to run it:
+   `python compare_real_datasets.py --data path/to/data --output path/to/output_folder`
 
-3. The file `LogRegCCD_LogRegSklearn_Breast_Ionosphere.ipnyb` shows sample printing results in our notebook format for two datasets and shows the results (one of us was working in a notebook, but the script `compare_real_datasets.py` can be used to compare all sets).
+4. The file `LogRegCCD_LogRegSklearn_Breast_Ionosphere.ipnyb` shows sample printing results in our notebook format for two datasets and shows the results (one of us was working in a notebook, but the script `compare_real_datasets.py` can be used to compare all sets).
 
-4. The notebook `test_synthetic.ipynb` performs similar evaluation on synthetic data.
+5. The notebook `test_synthetic.ipynb` performs similar evaluation on synthetic data.
 
-5. All model coefficients are saved in the `data/coefficients` folder.
+6. All model coefficients are saved in the `data/coefficients` folder.
